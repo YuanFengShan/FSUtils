@@ -1,7 +1,9 @@
-package com.jdboy.fsutils.utils;
+package com.jdboy.fsutils.fsutils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * IO流的工具类
@@ -36,5 +38,23 @@ public class IOUtil {
         }
         inputStream.close();
         return stringBuffer.toString();
+    }
+
+    /**
+     * 输入流写入输出流后关闭
+     * @param inputStream
+     * @param outputFile
+     * @throws IOException
+     */
+    public void inputStream2outputStream(InputStream inputStream,OutputStream outputFile) throws IOException {
+        byte[] bytes=new byte[1024];
+        int lenght=0;
+        while ((lenght=inputStream.read(bytes))!=-1){
+            outputFile.write(bytes,0,lenght);
+        }
+        outputFile.flush();
+        inputStream.close();
+        outputFile.close();
+
     }
 }
