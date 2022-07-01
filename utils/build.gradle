@@ -1,5 +1,6 @@
-plugins{
-    id  'com.android.library'
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
 }
 
 
@@ -25,6 +26,8 @@ android {
     lintOptions {
         abortOnError false
     }
+
+
 }
 
 dependencies {
@@ -48,3 +51,35 @@ task makeFsUtilsJar(type: Copy) {
 }
 
 makeFsUtilsJar.dependsOn(clearFsUtilsJar, build)
+
+publishing {
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/YuanFengShan/FSUtils")
+//            version('0.1.1-SNAPSHOT')
+//            group('com.fs.common')
+
+
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                println "拿到的UserName:$username"
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+                println "拿到的password:$password"
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+//            from(components.java)
+            groupId "com.fs.common"
+            artifactId "utils"
+            version "0.1.2-SNAPSHOT"
+
+        }
+    }
+}
+
+//group 'com.fs.common.utils'
+//version '0.1.0-SNAPSHOT'
