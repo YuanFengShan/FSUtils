@@ -1,4 +1,4 @@
-package com.jdboy.utils;
+package com.fs.common.utils;
 
 /**
  * 专门给腾讯用的工具类

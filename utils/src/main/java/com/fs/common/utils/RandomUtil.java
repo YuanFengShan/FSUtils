@@ -1,4 +1,4 @@
-package com.jdboy.utils;
+package com.fs.common.utils;
 
 import java.util.Date;
 import java.util.Random;

@@ -1,8 +1,10 @@
-package com.jdboy.fsutils;
+package com.fs.utils;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.jdboy.fsutils.R;
 
 public class MainActivity extends AppCompatActivity {
 

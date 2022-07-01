@@ -1,4 +1,4 @@
-package com.jdboy.utils;
+package com.fs.common.utils;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -1,4 +1,4 @@
-package com.jdboy.utils;
+package com.fs.common.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
