@@ -6,7 +6,6 @@ plugins {
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.0"
 
 
     defaultConfig {
@@ -39,18 +38,18 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
 
-task clearFsUtilsJar(type: Delete) {
-    delete 'build/outputs/FsUtils.jar'
+//task clearFsUtilsJar(type: Delete) {
+//    delete 'build/outputs/FsUtils.jar'
+//
+//}
+//task makeFsUtilsJar(type: Copy) {
+//    from('build/intermediates/packaged-classes/release/')
+//    into('build/outputs/')
+//    include('classes.jar')
+//    rename('classes.jar', 'FsUtils.jar')
+//}
 
-}
-task makeFsUtilsJar(type: Copy) {
-    from('build/intermediates/packaged-classes/release/')
-    into('build/outputs/')
-    include('classes.jar')
-    rename('classes.jar', 'FsUtils.jar')
-}
-
-makeFsUtilsJar.dependsOn(clearFsUtilsJar, build)
+//makeFsUtilsJar.dependsOn(clearFsUtilsJar, build)
 
 publishing {
 
@@ -58,28 +57,22 @@ publishing {
         maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/YuanFengShan/FSUtils")
-//            version('0.1.1-SNAPSHOT')
-//            group('com.fs.common')
-
 
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                username = project.findProperty("gpr.user") ?: System.getenv("github_user_name")
                 println "拿到的UserName:$username"
-                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+                password = project.findProperty("gpr.key") ?: System.getenv("github_token")
                 println "拿到的password:$password"
             }
         }
     }
     publications {
         gpr(MavenPublication) {
-//            from(components.java)
-            groupId "com.fs.common"
-            artifactId "utils"
-            version "0.1.2-SNAPSHOT"
+//            from(components.java)//这里我这里报错,注射了也不影响
+            groupId "com.fs.common"//这是组ID
+            artifactId "utils"//这是构件ID
+            version "0.0.4-SNAPSHOT"//这是版本
 
         }
     }
 }
-
-//group 'com.fs.common.utils'
-//version '0.1.0-SNAPSHOT'

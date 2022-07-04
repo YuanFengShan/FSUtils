@@ -8,7 +8,15 @@ buildscript {
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         google()
         mavenCentral()
-        maven { url 'https://maven.pkg.github.com/YuanFengShan/FSUtils' }
+        maven {
+            url= uri('https://maven.pkg.github.com/YuanFengShan/FSUtils')
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("github_user_name")
+//                println "拿到的UserName:$username"
+                password = project.findProperty("gpr.key") ?: System.getenv("github_token")
+//                println "拿到的password:$password"
+            }
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.3'
@@ -26,7 +34,15 @@ allprojects {
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         google()
         mavenCentral()
-        maven { url 'https://maven.pkg.github.com/YuanFengShan/FSUtils' }
+        maven {
+            url =uri('https://maven.pkg.github.com/YuanFengShan/FSUtils')
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("github_user_name")
+//                println "拿到的UserName:$username"
+                password = project.findProperty("gpr.key") ?: System.getenv("github_token")
+//                println "拿到的password:$password"
+            }
+        }
     }
 }
 

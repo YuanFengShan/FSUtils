@@ -4,7 +4,6 @@ plugins {
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.fs.fsutils"
         minSdkVersion 19
@@ -28,4 +27,5 @@ dependencies {
     })
     implementation 'androidx.appcompat:appcompat:1.0.0'
     testImplementation 'junit:junit:4.12'
+    implementation 'com.fs.common:utils:0.0.3-SNAPSHOT'
 }
