@@ -11,9 +11,10 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 29
-
+        versionCode 2
+        versionName "0.0.6-SNAPSHOT"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
+        flavorDimensions "versionCode"
     }
 
     buildTypes {
@@ -26,8 +27,15 @@ android {
         abortOnError false
     }
 
+//主要是下面这一段
+    android.libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = project.name + "_${defaultConfig.versionName}" + '.aar'
+        }
 
+    }
 }
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -51,6 +59,35 @@ dependencies {
 
 //makeFsUtilsJar.dependsOn(clearFsUtilsJar, build)
 
+// 打包sourcesJar任务
+//task sourcesJar(type: Jar, dependsOn: classes) {
+//    classifier = 'sources'
+//    from sourceSets.main.allSource
+//}
+//
+//// 打包javadocJar任务
+//task javadocJar(type: Jar, dependsOn: javadoc) {
+//    classifier = 'javadoc'
+//    from javadoc.destinationDir
+//}
+
+
+// 解决javadoc打包乱码
+//javadoc {
+//    options {
+//        encoding "UTF-8"
+//        charSet 'UTF-8'
+//        author true
+//        version true
+//        title "文档大标题"
+//    }
+//}
+def getAARName() {
+    printlh Properties
+//    return project.name + "_${defaultConfig.versionName}" + '.aar'
+    return project.name + "_${defaultConfig.versionName}" + '.aar'
+}
+
 publishing {
 
     repositories {
@@ -67,12 +104,43 @@ publishing {
         }
     }
     publications {
+
+//        mavenJava(MavenPublication) {
+//            //指定group/artifact/version信息
+//            groupId "com.fs.common"//这是组ID
+////            artifactId "utils"//这是构件ID
+//            version "0.0.4-SNAPSHOT"//这是版本
+//            // components.java jar包
+//            // components.web war包
+//            println '打印components:' + components
+////            from components.java
+//
+//            // 增加 sourcesJar、javadocJar 任务
+////            artifact sourcesJar
+////            artifact javadocJar
+//        }
         gpr(MavenPublication) {
 //            from(components.java)//这里我这里报错,注射了也不影响
             groupId "com.fs.common"//这是组ID
             artifactId "utils"//这是构件ID
-            version "0.0.4-SNAPSHOT"//这是版本
-
+            version android.defaultConfig.versionName//这是版本
+            String jarPath = projectDir.path + "\\build\\outputs\\aar\\"+project.name + "_${android.defaultConfig.versionName}" + '.aar'
+            println "aar路径:$jarPath"
+            artifact(jarPath)
+//            artifact sourcesJar
+//            artifact javadocJar
         }
+
+//        JohnBase(MavenPublication) {
+//            groupId "com.fs.common"//这是组ID
+//            artifactId "utils"//这是构件ID
+//            version "0.0.4-SNAPSHOT"//这是版本
+//            String jarPath = projectDir.path+"\\build\\outputs\\aar\\utils-release.aar"
+//            println "aar路径:$jarPath"
+//            artifact(jarPath)
+//        }
     }
 }
+group 'com.fs.common'
+//artifactId 'utils'
+version '0.0.4-SNAPSHOT'

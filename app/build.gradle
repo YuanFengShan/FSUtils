@@ -27,5 +27,5 @@ dependencies {
     })
     implementation 'androidx.appcompat:appcompat:1.0.0'
     testImplementation 'junit:junit:4.12'
-    implementation 'com.fs.common:utils:0.0.3-SNAPSHOT'
+    implementation 'com.fs.common:utils:0.0.6-SNAPSHOT'
 }
