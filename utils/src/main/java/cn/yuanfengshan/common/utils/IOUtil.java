@@ -1,4 +1,4 @@
-package com.fs.common.utils;
+package cn.yuanfengshan.common.utils;
 
 import java.io.IOException;
 import java.io.InputStream;

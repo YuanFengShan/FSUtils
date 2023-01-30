@@ -1,4 +1,4 @@
-package com.fs.common.utils;
+package cn.yuanfengshan.common.utils;
 
 import java.util.Date;
 import java.util.Random;

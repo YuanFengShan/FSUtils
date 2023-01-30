@@ -1,4 +1,4 @@
-package com.fs.common.utils;
+package cn.yuanfengshan.common.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;

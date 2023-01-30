@@ -7,14 +7,14 @@ plugins {
 
 
 
-def VERSION = "0.0.2"
+def VERSION = "0.0.3"
 android {
-    compileSdkVersion 29
+    compileSdkVersion 32
 
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion 32
         versionCode 4
         versionName VERSION
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -50,12 +50,15 @@ dependencies {
 //    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
 
-println("打印日志")
+println("检查仓库账号信息")
 println("ossrhUsername：${ossrhUsername}")
 println("ossrhPassword：${ossrhPassword}")
 
-def ossHead="https://s01.oss.sonatype.org"
 
+def ossHead = "https://s01.oss.sonatype.org"
+def customArtifactId="FSUtils"
+def githubUrl="https://github.com/YuanFengShan/FSUtils"
+def githubGitUrl="${githubUrl}.git"
 afterEvaluate {
     publishing {
         repositories {
@@ -78,7 +81,7 @@ afterEvaluate {
                 allowInsecureProtocol(true)
                 name "sonatype-Snapshots"
                 // change to point to your repo, e.g. http://my.org/repo
-                 url = "${ossHead}/content/repositories/snapshots/"
+                url = "${ossHead}/content/repositories/snapshots/"
                 println("${name}仓库上传的地址:${url}")
                 credentials {
                     username = ossrhUsername
@@ -92,14 +95,16 @@ afterEvaluate {
                 // Applies the component for the release build variant.
                 from components.release
 
+//                from components.release
+
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'io.github.yuanfengshan'
-                artifactId = 'FSUtils'
+                artifactId = customArtifactId
                 version = VERSION
                 pom {
-                    name = 'FSUtils Android Plugin Framework'
+                    name = customArtifactId+' Android Plugin Framework'
                     description = 'A Android Plugin Framework'
-                    url = 'https://github.com/YuanFengShan/FSUtils'
+                    url = githubUrl
                     licenses {
                         license {
                             name = 'The Apache Software License, Version 2.0'
@@ -114,9 +119,9 @@ afterEvaluate {
                         }
                     }
                     scm {
-                        connection = 'scm:git:git://github.com/YuanFengShan/FSUtils.git'
-                        developerConnection = 'scm:git:git://github.com/YuanFengShan/FSUtils.git'
-                        url = 'https://github.com/YuanFengShan/FSUtils'
+                        connection = githubGitUrl
+                        developerConnection =githubGitUrl
+                        url = githubUrl
                     }
                 }
             }
@@ -125,14 +130,15 @@ afterEvaluate {
                 // Applies the component for the debug build variant.
                 from components.debug
 
+
                 groupId = 'io.github.yuanfengshan'
-                artifactId = 'FSUtils-debug'
+                artifactId = customArtifactId
                 version = String.format("%s-SNAPSHOT", VERSION)
 
                 pom {
-                    name = 'FSUtils Android Plugin Framework'
+                    name = customArtifactId+' Android Plugin Framework'
                     description = 'A Android Plugin Framework'
-                    url = 'https://github.com/YuanFengShan/FSUtils'
+                    url = githubUrl
                     licenses {
                         license {
                             name = 'The Apache Software License, Version 2.0'
@@ -147,20 +153,15 @@ afterEvaluate {
                         }
                     }
                     scm {
-                        connection = 'scm:git:git://github.com/YuanFengShan/FSUtils.git'
-                        developerConnection = 'scm:git:git://github.com/YuanFengShan/FSUtils.git'
-                        url = 'https://github.com/YuanFengShan/FSUtils'
+                        connection = githubGitUrl
+                        developerConnection =githubGitUrl
+                        url = githubUrl
                     }
                 }
             }
         }
-
-//        signing {
-//            sign publishing.publications.release, publishing.publications.debug
-//        }
     }
 }
-
 
 
 task sourcesJar(type: Jar) {
@@ -176,88 +177,5 @@ task androidSourcesJar(type: Jar) {
     classifier = 'sources'
     from android.sourceSets.main.java.srcDirs
 }
-
-//task javadocJar(type: Jar) {
-//    classifier = 'javadoc'
-//    from javadoc
-//}
-//
-//task sourcesJar(type: Jar) {
-//    classifier = 'sources'
-//    from sourceSets.main.allSource
-//}
-
-
-//task clearFsUtilsJar(type: Delete) {
-//    delete 'build/outputs/FsUtils.jar'
-//
-//}
-//task makeFsUtilsJar(type: Copy) {
-//    from('build/intermediates/packaged-classes/release/')
-//    into('build/outputs/')
-//    include('classes.jar')
-//    rename('classes.jar', 'FsUtils.jar')
-//}
-
-//makeFsUtilsJar.dependsOn(clearFsUtilsJar, build)
-
-
-
-//tasks.register("javadoc", Javadoc::class.java) {
-//    group = "publishing"
-//    dependsOn("assemble")
-//    source = android.sourceSets["main"].java.getSourceFiles()
-//    classpath += project.files(android.bootClasspath + File.pathSeparator)
-//    if (JavaVersion.current().isJava9Compatible) {
-//        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
-//    }
-//    android.libraryVariants.forEach { libraryVariant ->
-//        classpath += libraryVariant.javaCompileProvider.get().classpath
-//    }
-//    options.apply {
-//        encoding("UTF-8")
-//        charset("UTF-8")
-//        isFailOnError = false
-//
-//        (this as StandardJavadocDocletOptions).apply {
-//            addStringOption("Xdoclint:none")
-//            links?.add("https://developer.android.google.cn/reference/")
-//            links?.add("http://docs.oracle.com/javase/8/docs/api/")
-//        }
-//    }
-//}
-//
-//tasks.register("jarSource", Jar::class.java) {
-//    group = "publishing"
-//    from(android.sourceSets["main"].java.srcDirs)
-//    archiveClassifier.set("sources")
-//}
-//
-//tasks.register("jarJavadoc", Jar::class.java) {
-//    group = "publishing"
-//    dependsOn("javadoc")
-//    val javadoc: Javadoc = tasks.getByName("javadoc") as Javadoc
-//    from(javadoc.destinationDir)
-//    archiveClassifier.set("javadoc")
-//}
-//
-
-
-// 解决javadoc打包乱码
-//javadoc {
-//    options {
-//        encoding "UTF-8"
-//        charSet 'UTF-8'
-//        author true
-//        version true
-//        title "文档大标题"
-//    }
-//}
-//def getAARName() {
-//    printlh Properties
-////    return project.name + "_${defaultConfig.versionName}" + '.aar'
-//    return project.name + "_${defaultConfig.versionName}" + '.aar'
-//}
-
 
 
