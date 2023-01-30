@@ -13,7 +13,7 @@ import androidx.core.app.ActivityCompat;
  * 设备信息工具类
  */
 public class DeviceUtil {
-    public static final String TAG = "SINOSIG";
+    public static final String TAG = "YFS";
 
     public static String getIMEI(Context context) {
         String deviceId = null;

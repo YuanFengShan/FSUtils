@@ -4,7 +4,13 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/FSUtils.iml" filepath="$PROJECT_DIR$/.idea/modules/FSUtils.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FSUtils.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FSUtils.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FSUtils.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FSUtils.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FSUtils.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FSUtils.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FSUtils.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FSUtils.app.unitTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/utils/FSUtils.utils.iml" filepath="$PROJECT_DIR$/.idea/modules/utils/FSUtils.utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/utils/FSUtils.utils.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/utils/FSUtils.utils.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/utils/FSUtils.utils.main.iml" filepath="$PROJECT_DIR$/.idea/modules/utils/FSUtils.utils.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/utils/FSUtils.utils.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/utils/FSUtils.utils.unitTest.iml" />
     </modules>
   </component>
 </project>

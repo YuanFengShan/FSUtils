@@ -1,5 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-
+//apply from:"custom_config.gradle"
 buildscript {
     repositories {
         maven { url 'https://maven.aliyun.com/repository/jcenter' }

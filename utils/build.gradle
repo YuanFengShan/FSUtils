@@ -1,9 +1,13 @@
 plugins {
     id 'com.android.library'
+    id 'kotlin-android'
     id 'maven-publish'
+    id 'signing'
 }
 
 
+
+def VERSION = "0.0.2"
 android {
     compileSdkVersion 29
 
@@ -12,7 +16,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 4
-        versionName "0.0.8-SNAPSHOT"
+        versionName VERSION
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions "versionCode"
     }
@@ -38,13 +42,151 @@ android {
 
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    compileOnly 'androidx.appcompat:appcompat:1.0.2'
+//    testImplementation 'junit:junit:4.12'
+//    androidTestImplementation 'androidx.test:runner:1.2.0'
+//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
+
+println("打印日志")
+println("ossrhUsername：${ossrhUsername}")
+println("ossrhPassword：${ossrhPassword}")
+
+def ossHead="https://s01.oss.sonatype.org"
+
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                name "local"
+                url = "$buildDir/repo"
+            }
+            maven {
+                allowInsecureProtocol(true)
+                name "sonartype-Staging"
+                url = "${ossHead}/service/local/staging/deploy/maven2"
+                println("${name}仓库上传的地址:${url}")
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+            // 定义snapshot仓库
+            maven {
+                allowInsecureProtocol(true)
+                name "sonatype-Snapshots"
+                // change to point to your repo, e.g. http://my.org/repo
+                 url = "${ossHead}/content/repositories/snapshots/"
+                println("${name}仓库上传的地址:${url}")
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+        }
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+
+                // You can then customize attributes of the publication as shown below.
+                groupId = 'io.github.yuanfengshan'
+                artifactId = 'FSUtils'
+                version = VERSION
+                pom {
+                    name = 'FSUtils Android Plugin Framework'
+                    description = 'A Android Plugin Framework'
+                    url = 'https://github.com/YuanFengShan/FSUtils'
+                    licenses {
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'yuanfengshan'
+                            name = 'yuanfengshan'
+                            email = '645633369@qq.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com/YuanFengShan/FSUtils.git'
+                        developerConnection = 'scm:git:git://github.com/YuanFengShan/FSUtils.git'
+                        url = 'https://github.com/YuanFengShan/FSUtils'
+                    }
+                }
+            }
+            // Creates a Maven publication called “debug”.
+            debug(MavenPublication) {
+                // Applies the component for the debug build variant.
+                from components.debug
+
+                groupId = 'io.github.yuanfengshan'
+                artifactId = 'FSUtils-debug'
+                version = String.format("%s-SNAPSHOT", VERSION)
+
+                pom {
+                    name = 'FSUtils Android Plugin Framework'
+                    description = 'A Android Plugin Framework'
+                    url = 'https://github.com/YuanFengShan/FSUtils'
+                    licenses {
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'yuanfengshan'
+                            name = 'yuanfengshan'
+                            email = '645633369@qq.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com/YuanFengShan/FSUtils.git'
+                        developerConnection = 'scm:git:git://github.com/YuanFengShan/FSUtils.git'
+                        url = 'https://github.com/YuanFengShan/FSUtils'
+                    }
+                }
+            }
+        }
+
+//        signing {
+//            sign publishing.publications.release, publishing.publications.debug
+//        }
+    }
+}
+
+
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveClassifier.set("sources")
+}
+signing {
+    sign publishing.publications
+}
+
+//打包main目录下代码和资源的 task
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+//task javadocJar(type: Jar) {
+//    classifier = 'javadoc'
+//    from javadoc
+//}
+//
+//task sourcesJar(type: Jar) {
+//    classifier = 'sources'
+//    from sourceSets.main.allSource
+//}
+
 
 //task clearFsUtilsJar(type: Delete) {
 //    delete 'build/outputs/FsUtils.jar'
@@ -59,17 +201,46 @@ dependencies {
 
 //makeFsUtilsJar.dependsOn(clearFsUtilsJar, build)
 
-// 打包sourcesJar任务
-//task sourcesJar(type: Jar, dependsOn: classes) {
-//    classifier = 'sources'
-//    from sourceSets.main.allSource
+
+
+//tasks.register("javadoc", Javadoc::class.java) {
+//    group = "publishing"
+//    dependsOn("assemble")
+//    source = android.sourceSets["main"].java.getSourceFiles()
+//    classpath += project.files(android.bootClasspath + File.pathSeparator)
+//    if (JavaVersion.current().isJava9Compatible) {
+//        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+//    }
+//    android.libraryVariants.forEach { libraryVariant ->
+//        classpath += libraryVariant.javaCompileProvider.get().classpath
+//    }
+//    options.apply {
+//        encoding("UTF-8")
+//        charset("UTF-8")
+//        isFailOnError = false
+//
+//        (this as StandardJavadocDocletOptions).apply {
+//            addStringOption("Xdoclint:none")
+//            links?.add("https://developer.android.google.cn/reference/")
+//            links?.add("http://docs.oracle.com/javase/8/docs/api/")
+//        }
+//    }
 //}
 //
-//// 打包javadocJar任务
-//task javadocJar(type: Jar, dependsOn: javadoc) {
-//    classifier = 'javadoc'
-//    from javadoc.destinationDir
+//tasks.register("jarSource", Jar::class.java) {
+//    group = "publishing"
+//    from(android.sourceSets["main"].java.srcDirs)
+//    archiveClassifier.set("sources")
 //}
+//
+//tasks.register("jarJavadoc", Jar::class.java) {
+//    group = "publishing"
+//    dependsOn("javadoc")
+//    val javadoc: Javadoc = tasks.getByName("javadoc") as Javadoc
+//    from(javadoc.destinationDir)
+//    archiveClassifier.set("javadoc")
+//}
+//
 
 
 // 解决javadoc打包乱码
@@ -82,65 +253,11 @@ dependencies {
 //        title "文档大标题"
 //    }
 //}
-def getAARName() {
-    printlh Properties
+//def getAARName() {
+//    printlh Properties
+////    return project.name + "_${defaultConfig.versionName}" + '.aar'
 //    return project.name + "_${defaultConfig.versionName}" + '.aar'
-    return project.name + "_${defaultConfig.versionName}" + '.aar'
-}
+//}
 
-publishing {
 
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/YuanFengShan/FSUtils")
 
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("github_user_name")
-                println "拿到的UserName:$username"
-                password = project.findProperty("gpr.key") ?: System.getenv("github_token")
-                println "拿到的password:$password"
-            }
-        }
-    }
-    publications {
-
-//        mavenJava(MavenPublication) {
-//            //指定group/artifact/version信息
-//            groupId "com.fs.common"//这是组ID
-////            artifactId "utils"//这是构件ID
-//            version "0.0.4-SNAPSHOT"//这是版本
-//            // components.java jar包
-//            // components.web war包
-//            println '打印components:' + components
-////            from components.java
-//
-//            // 增加 sourcesJar、javadocJar 任务
-////            artifact sourcesJar
-////            artifact javadocJar
-//        }
-        gpr(MavenPublication) {
-//            from(components.java)//这里我这里报错,注射了也不影响
-            groupId "com.fs.common"//这是组ID
-            artifactId "utils"//这是构件ID
-            version android.defaultConfig.versionName//这是版本
-            String jarPath = projectDir.path + "\\build\\outputs\\aar\\"+project.name + "_${android.defaultConfig.versionName}" + '.aar'
-            println "aar路径:$jarPath"
-            artifact(jarPath)
-//            artifact sourcesJar
-//            artifact javadocJar
-        }
-
-//        JohnBase(MavenPublication) {
-//            groupId "com.fs.common"//这是组ID
-//            artifactId "utils"//这是构件ID
-//            version "0.0.4-SNAPSHOT"//这是版本
-//            String jarPath = projectDir.path+"\\build\\outputs\\aar\\utils-release.aar"
-//            println "aar路径:$jarPath"
-//            artifact(jarPath)
-//        }
-    }
-}
-group 'com.fs.common'
-//artifactId 'utils'
-version '0.0.4-SNAPSHOT'
